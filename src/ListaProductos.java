@@ -54,11 +54,6 @@ public class ListaProductos {
 
     // Busca un Producto por nombre en 'Lista Productos'
     public Producto buscarProducto(String nombreXBuscar) {
-        
-        if (estaVacia()) {
-            System.out.println("El producto buscado no se encuentra en la lista...\n");
-            return null;
-        }
 
         Nodo actual = primero;
 
@@ -68,19 +63,11 @@ public class ListaProductos {
             }
             actual = actual.getSiguiente(); 
         }
-
-        
-        System.out.println("El producto buscado NO se encuentra en la lista...\n");
         return null;
     }
 
     // Elimina un Producto por nombre de 'ListaProductos'
     public Producto eliminarProducto(String eliminarXNombre) {
-
-        if (estaVacia()) {
-            System.out.println("La lista de productos está vacía\n");
-            return null;
-        }
 
         Nodo actual = primero;
         Nodo anteriorActual = null;
@@ -99,17 +86,11 @@ public class ListaProductos {
             actual = actual.getSiguiente();  
         }
         
-        System.out.println("El producto por eliminar NO se encuentra en la lista...\n");
         return null;
     }
 
     // Modifica un Producto existente en 'ListaProductos'
     public Producto modificarProducto(String modificarXNombre, String nuevoNombre, double nuevoPrecio, String nuevaCategoria, String nuevaFechaVencimiento, int nuevaCantidad) {
-
-        if (estaVacia()) {
-            System.out.println("La lista de productos está vacía\n");
-            return null;
-        }
 
         Nodo actual = primero;
 
@@ -124,11 +105,8 @@ public class ListaProductos {
 
                 return actual.getProducto(); 
             }
-
             actual = actual.getSiguiente();
         }
-
-        System.out.println("El producto a modificar no se encontró.\n");
         return null;
     }
 
@@ -150,7 +128,7 @@ public class ListaProductos {
     // Genera un reporte de costos por Producto seleccionado y costos totales
     public void reportarCostos() {
         if (estaVacia()) {
-            System.out.println("La lista de productos está vacía\n");
+            System.out.println("La lista de productos está vacía...\n");
             return;
         }
 
@@ -162,6 +140,7 @@ public class ListaProductos {
         while (actual != null) {
 
             System.out.println("Producto: " + actual.getProducto().getNombre());
+            System.out.println("Cantidad de producto: " + actual.getProducto().getCantidad() + " unidades");
             System.out.println("Costo total del producto: ₡" + actual.getProducto().calcularCostoTotal());
             
             costosTotales += actual.getProducto().calcularCostoTotal();
@@ -170,5 +149,4 @@ public class ListaProductos {
 
         System.out.println("\nCostos totales del inventario: " + costosTotales);
     }
-
 }
