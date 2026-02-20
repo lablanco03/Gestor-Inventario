@@ -120,6 +120,15 @@ public class ListaProductos {
         return null;
     }
 
+    //Agrega una ruta de imagen a un Producto existente en la lista
+    public void agregarImagenProducto(Producto producto, String rutaImagen) {
+        if (buscarProducto(producto.getNombre()) != null) {
+            producto.agregarImagen(rutaImagen);
+        } else {
+            System.out.println("Producto NO se encuentra en la lista...");
+        }
+    }
+
     // Imprime todos los Prodcutos existentes en 'ListaProductos'
     public void imprimirListaProductos() {
         if (estaVacia()) {
