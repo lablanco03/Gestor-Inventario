@@ -25,22 +25,29 @@ public class ListaProductos {
 
     // Operaciones
 
-    // Insetar nuevo Nodo al inicio de 'ListaProductos'
-    public void insertarNodoInicio(Producto producto) {
-        Nodo nuevoProducto = new Nodo(producto);
+    // Insertar nuevo Producto al inicio de 'ListaProductos'
+    public void agregarProductoInicio(Producto producto) {
         
-        nuevoProducto.setSiguiente(primero);
-        setPrimero(nuevoProducto);
+        if (buscarProducto(producto.getNombre()) == null) {
+            Nodo nuevoProducto = new Nodo(producto);
         
-        cantidadProductos ++;
+            nuevoProducto.setSiguiente(primero);
+            setPrimero(nuevoProducto);
+        
+            cantidadProductos ++;
+        } else {
+            System.out.println("Producto ya se encuentra en la lista...");
+        }
     }
 
-    // Insertar nuevo Nodo al final de 'ListaProductos'
-    public void insertarNodoFinal(Producto producto) {
+    // Insertar nuevo Producto al final de 'ListaProductos'
+    public void agregarProductoFinal(Producto producto) {
+
+        if (buscarProducto(producto.getNombre()) == null) {
         Nodo nuevoProducto = new Nodo(producto);
 
         if (estaVacia()) {
-        primero = nuevoProducto;
+            setPrimero(nuevoProducto);
         } else {
             Nodo actual = primero;
 
@@ -50,6 +57,9 @@ public class ListaProductos {
             actual.setSiguiente(nuevoProducto);
         }
         cantidadProductos ++;
+        } else {
+            System.out.println("Producto ya se encuentra en la lista...");
+        }
     }
 
     // Busca un Producto por nombre en 'Lista Productos'
