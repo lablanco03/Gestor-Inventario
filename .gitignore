@@ -1,0 +1,10 @@
+*.class
+*.log
+*.ctxt
+*.iml
+*.code-workspace
+.idea/
+.vscode/
+target/
+build/
+.DS_Store
