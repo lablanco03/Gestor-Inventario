@@ -14,11 +14,11 @@ public class Producto {
     public Producto(String nombre, double precio, String categoria, String fechaVencimiento, int cantidad) {
 
         this.nombre = nombre;
-        if (precio < 0) { throw new IllegalArgumentException("El precio no puede ser negativo"); }
+        if (precio < 0) { throw new IllegalArgumentException("El precio no puede ser negativo..."); }
         this.precio = precio;
         this.categoria = categoria;
         this.fechaVencimiento = fechaVencimiento;
-        if (cantidad < 0) { throw new IllegalArgumentException("La cantidad no puede ser negativa"); }
+        if (cantidad < 0) { throw new IllegalArgumentException("La cantidad no puede ser negativa..."); }
         this.cantidad = cantidad;
         this.listaImagenes = new ArrayList<>();
     }
@@ -68,7 +68,7 @@ public class Producto {
     public String toString() {
         return "Nombre: " + nombre +
                 "\nCategoría: " + categoria +
-                "\nPrecio: ₡" + String.format("%.2f", precio) +
+                "\nPrecio: " + String.format("%.2f", precio) + " colones" +
                 "\nCantidad: " + cantidad +
                 "\nFecha de Vencimiento: " + (fechaVencimiento != null ? fechaVencimiento : "No aplica") +
                 "\nCantidad de Imágenes: " + listaImagenes.size() +

@@ -144,36 +144,35 @@ public class ListaProductos {
         }
     }
 
-    // Genera un reporte de costos por Producto seleccionado y costos totales
-public void reportarCostos() {
-    if (estaVacia()) {
-        System.out.println("La lista de productos está vacía...\n");
-        return;
+    // Genera un reporte de costos por Producto y costos totales
+    public void reportarCostos() {
+        if (estaVacia()) {
+            System.out.println("La lista de productos está vacía...\n");
+            return;
+        }
+
+        Nodo actual = primero;
+        double costosTotales = 0;
+
+        System.out.println("\n------------------------    REPORTE DE COSTOS    ------------------------\n");
+        System.out.printf("%-25s %10s %15s %20s%n", "Producto", "Cantidad", "Precio Unit.", "Costo Total");
+        System.out.println("\n-------------------------------------------------------------------------\n");
+
+        while (actual != null) {
+            Producto producto = actual.getProducto();
+            double costoProducto = producto.calcularCostoTotal();
+            // Fila de datos
+            System.out.printf("%-25s %10d %15.2f %20.2f%n",
+                    producto.getNombre(),
+                    producto.getCantidad(),
+                    producto.getPrecio(),
+                    costoProducto);
+            costosTotales += costoProducto;
+            actual = actual.getSiguiente();
+        }
+
+        System.out.println("\n-------------------------------------------------------------------------\n");
+        System.out.printf("TOTAL DEL INVENTARIO: %51.2f%n", costosTotales);
+        System.out.println("\n-------------------------------------------------------------------------");
     }
-
-    Nodo actual = primero;
-    double costosTotales = 0;
-
-    System.out.println("\n-----------------------    REPORTE DE COSTOS    -----------------------");
-    // Cabecera de la tabla
-    System.out.printf("%-25s %10s %15s %20s%n", "Producto", "Cantidad", "Precio Unit.", "Costo Total");
-    System.out.println("---------------------------------------------------------------");
-
-    while (actual != null) {
-        Producto p = actual.getProducto();
-        double costoProducto = p.calcularCostoTotal();
-        // Fila de datos
-        System.out.printf("%-25s %10d %15.2f %20.2f%n",
-                p.getNombre(),
-                p.getCantidad(),
-                p.getPrecio(),
-                costoProducto);
-        costosTotales += costoProducto;
-        actual = actual.getSiguiente();
-    }
-
-    System.out.println("---------------------------------------------------------------");
-    System.out.printf("TOTAL DEL INVENTARIO: %50.2f%n", costosTotales);
-    System.out.println();
-}
 }
