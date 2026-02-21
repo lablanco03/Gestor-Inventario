@@ -68,7 +68,7 @@ public class Producto {
     public String toString() {
         return "Nombre: " + nombre +
                 "\nCategoría: " + categoria +
-                "\nPrecio: ₡" + precio +
+                "\nPrecio: ₡" + String.format("%.2f", precio) +
                 "\nCantidad: " + cantidad +
                 "\nFecha de Vencimiento: " + (fechaVencimiento != null ? fechaVencimiento : "No aplica") +
                 "\nCantidad de Imágenes: " + listaImagenes.size() +
