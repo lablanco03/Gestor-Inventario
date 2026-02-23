@@ -71,7 +71,6 @@ public class Producto {
                 "\nPrecio: " + String.format("%.2f", precio) + " colones" +
                 "\nCantidad: " + cantidad +
                 "\nFecha de Vencimiento: " + (fechaVencimiento != null ? fechaVencimiento : "No aplica") +
-                "\nCantidad de Imágenes: " + listaImagenes.size() +
-                "\n-----------------------------------";
+                "\nCantidad de Imágenes: " + listaImagenes.size();
     }
 }

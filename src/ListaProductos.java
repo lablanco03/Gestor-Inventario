@@ -35,8 +35,11 @@ public class ListaProductos {
             setPrimero(nuevoProducto);
         
             cantidadProductos ++;
+            System.out.println("\n¡Producto agregado correctamente!");
+            System.out.println("\n-------------------------");
         } else {
-            System.out.println("Producto ya se encuentra en la lista...");
+            System.out.println("\nProducto ya se encuentra en la lista...");
+            System.out.println("\n-------------------------");
         }
     }
 
@@ -56,9 +59,12 @@ public class ListaProductos {
             }
             actual.setSiguiente(nuevoProducto);
         }
+        System.out.println("\n¡Producto agregado correctamente!");
+        System.out.println("\n-------------------------");
         cantidadProductos ++;
         } else {
-            System.out.println("Producto ya se encuentra en la lista...");
+            System.out.println("\nProducto ya se encuentra en la lista...");
+            System.out.println("\n-------------------------");
         }
     }
 
@@ -132,7 +138,8 @@ public class ListaProductos {
     // Imprime todos los Prodcutos existentes en 'ListaProductos'
     public void imprimirListaProductos() {
         if (estaVacia()) {
-            System.out.println("La lista de productos está vacía\n");
+            System.out.println("La lista de productos está vacía...");
+            System.out.println();
             return;
         }
 
@@ -140,14 +147,17 @@ public class ListaProductos {
 
         while (actual != null) {
             System.out.println(actual.getProducto());
-            actual = actual.getSiguiente();            
+            actual = actual.getSiguiente();
+            System.out.println();          
         }
     }
 
     // Genera un reporte de costos por Producto y costos totales
     public void reportarCostos() {
         if (estaVacia()) {
-            System.out.println("La lista de productos está vacía...\n");
+            System.out.println("\n----------- REPORTE DE COSTOS -----------\n");
+            System.out.println("La lista de productos está vacía...");
+            System.out.println("\n-------------------------");
             return;
         }
 
