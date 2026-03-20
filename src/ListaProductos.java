@@ -1,7 +1,7 @@
 public class ListaProductos {
 
     // Atributos
-    private Nodo primero;
+    private NodoLista primero;
     private int cantidadProductos;
 
     // Constructor
@@ -11,12 +11,12 @@ public class ListaProductos {
     }
 
     // Getters
-    public Nodo getPrimero() { return primero; }
+    public NodoLista getPrimero() { return primero; }
 
     public int getCantidadProductos() { return cantidadProductos; }
 
     // Setters
-    public void setPrimero(Nodo primero) { this.primero = primero; }
+    public void setPrimero(NodoLista primero) { this.primero = primero; }
 
     public void setCantidadProductos(int cantidadProductos) { this.cantidadProductos = cantidadProductos; }
 
@@ -29,7 +29,7 @@ public class ListaProductos {
     public void agregarProductoInicio(Producto producto) {
         
         if (buscarProducto(producto.getNombre()) == null) {
-            Nodo nuevoProducto = new Nodo(producto);
+            NodoLista nuevoProducto = new NodoLista(producto);
         
             nuevoProducto.setSiguiente(primero);
             setPrimero(nuevoProducto);
@@ -47,12 +47,12 @@ public class ListaProductos {
     public void agregarProductoFinal(Producto producto) {
 
         if (buscarProducto(producto.getNombre()) == null) {
-        Nodo nuevoProducto = new Nodo(producto);
+        NodoLista nuevoProducto = new NodoLista(producto);
 
         if (estaVacia()) {
             setPrimero(nuevoProducto);
         } else {
-            Nodo actual = primero;
+            NodoLista actual = primero;
 
             while (actual.getSiguiente() != null) {
                 actual = actual.getSiguiente();
@@ -71,7 +71,7 @@ public class ListaProductos {
     // Busca un Producto por nombre en 'Lista Productos'
     public Producto buscarProducto(String nombreXBuscar) {
 
-        Nodo actual = primero;
+        NodoLista actual = primero;
 
         while (actual != null) {
             if (actual.getProducto().getNombre().equalsIgnoreCase(nombreXBuscar)) {
@@ -85,8 +85,8 @@ public class ListaProductos {
     // Elimina un Producto por nombre de 'ListaProductos'
     public Producto eliminarProducto(String eliminarXNombre) {
 
-        Nodo actual = primero;
-        Nodo anteriorActual = null;
+        NodoLista actual = primero;
+        NodoLista anteriorActual = null;
 
         while (actual != null) {
             if (actual.getProducto().getNombre().equalsIgnoreCase(eliminarXNombre)) {
@@ -108,7 +108,7 @@ public class ListaProductos {
     // Modifica un Producto existente en 'ListaProductos'
     public Producto modificarProducto(String modificarXNombre, String nuevoNombre, double nuevoPrecio, String nuevaCategoria, String nuevaFechaVencimiento, int nuevaCantidad) {
 
-        Nodo actual = primero;
+        NodoLista actual = primero;
 
         while (actual != null) {
             if (actual.getProducto().getNombre().equalsIgnoreCase(modificarXNombre)) {
@@ -143,7 +143,7 @@ public class ListaProductos {
             return;
         }
 
-        Nodo actual = primero;
+        NodoLista actual = primero;
 
         while (actual != null) {
             System.out.println(actual.getProducto());
@@ -161,7 +161,7 @@ public class ListaProductos {
             return;
         }
 
-        Nodo actual = primero;
+        NodoLista actual = primero;
         double costosTotales = 0;
 
         System.out.println("\n------------------------    REPORTE DE COSTOS    ------------------------\n");
