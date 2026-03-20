@@ -39,18 +39,18 @@ public class Producto {
     // Setters
     public void setNombre(String nombre) { this.nombre = nombre; }
 
-    public void setPrecio(double precio) { 
+    public void setPrecio(double precio) {
         if (precio < 0) { throw new IllegalArgumentException("El precio no puede ser negativo"); }
-        this.precio = precio; 
+        this.precio = precio;
     }
 
     public void setCategoria(String categoria) { this.categoria = categoria; }
 
     public void setFechaVencimiento(String fechaVencimiento) { this.fechaVencimiento = fechaVencimiento; }
 
-    public void setCantidad(int cantidad) { 
+    public void setCantidad(int cantidad) {
         if (cantidad < 0) { throw new IllegalArgumentException("La cantidad no puede ser negativa"); }
-        this.cantidad = cantidad; 
+        this.cantidad = cantidad;
     }
 
     // Agregar imagen al Producto
@@ -71,7 +71,6 @@ public class Producto {
                 "\nPrecio: " + String.format("%.2f", precio) + " colones" +
                 "\nCantidad: " + cantidad +
                 "\nFecha de Vencimiento: " + (fechaVencimiento != null ? fechaVencimiento : "No aplica") +
-                "\nCantidad de Imágenes: " + listaImagenes.size() +
-                "\n-----------------------------------";
+                "\nCantidad de Imágenes: " + listaImagenes.size();
     }
 }

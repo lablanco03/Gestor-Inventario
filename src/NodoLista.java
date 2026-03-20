@@ -1,11 +1,11 @@
-public class Nodo {
-    
+public class NodoLista {
+
     // Atributos
     private Producto producto;
-    private Nodo siguiente;
+    private NodoLista siguiente;
 
     // Constructor
-    public Nodo(Producto producto) {
+    public NodoLista(Producto producto) {
         this.producto = producto;
         this.siguiente = null;
     }
@@ -13,11 +13,11 @@ public class Nodo {
     // Getters
     public Producto getProducto() { return producto; }
 
-    public Nodo getSiguiente() { return siguiente; }
-    
+    public NodoLista getSiguiente() { return siguiente; }
+
     // Setters
     public void setProducto(Producto producto) { this.producto = producto; }
 
-    public void setSiguiente(Nodo siguiente) { this.siguiente = siguiente; }
+    public void setSiguiente(NodoLista siguiente) { this.siguiente = siguiente; }
 
 }

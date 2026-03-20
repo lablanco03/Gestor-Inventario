@@ -1,7 +1,7 @@
 public class ListaProductos {
 
     // Atributos
-    private Nodo primero;
+    private NodoLista primero;
     private int cantidadProductos;
 
     // Constructor
@@ -11,12 +11,12 @@ public class ListaProductos {
     }
 
     // Getters
-    public Nodo getPrimero() { return primero; }
+    public NodoLista getPrimero() { return primero; }
 
     public int getCantidadProductos() { return cantidadProductos; }
 
     // Setters
-    public void setPrimero(Nodo primero) { this.primero = primero; }
+    public void setPrimero(NodoLista primero) { this.primero = primero; }
 
     public void setCantidadProductos(int cantidadProductos) { this.cantidadProductos = cantidadProductos; }
 
@@ -27,16 +27,19 @@ public class ListaProductos {
 
     // Insertar nuevo Producto al inicio de 'ListaProductos'
     public void agregarProductoInicio(Producto producto) {
-        
+
         if (buscarProducto(producto.getNombre()) == null) {
-            Nodo nuevoProducto = new Nodo(producto);
-        
+            NodoLista nuevoProducto = new NodoLista(producto);
+
             nuevoProducto.setSiguiente(primero);
             setPrimero(nuevoProducto);
-        
+
             cantidadProductos ++;
+            System.out.println("\n¡Producto agregado correctamente!");
+            System.out.println("\n-------------------------");
         } else {
-            System.out.println("Producto ya se encuentra en la lista...");
+            System.out.println("\nProducto ya se encuentra en la lista...");
+            System.out.println("\n-------------------------");
         }
     }
 
@@ -44,34 +47,37 @@ public class ListaProductos {
     public void agregarProductoFinal(Producto producto) {
 
         if (buscarProducto(producto.getNombre()) == null) {
-        Nodo nuevoProducto = new Nodo(producto);
+            NodoLista nuevoProducto = new NodoLista(producto);
 
-        if (estaVacia()) {
-            setPrimero(nuevoProducto);
-        } else {
-            Nodo actual = primero;
+            if (estaVacia()) {
+                setPrimero(nuevoProducto);
+            } else {
+                NodoLista actual = primero;
 
-            while (actual.getSiguiente() != null) {
-                actual = actual.getSiguiente();
+                while (actual.getSiguiente() != null) {
+                    actual = actual.getSiguiente();
+                }
+                actual.setSiguiente(nuevoProducto);
             }
-            actual.setSiguiente(nuevoProducto);
-        }
-        cantidadProductos ++;
+            System.out.println("\n¡Producto agregado correctamente!");
+            System.out.println("\n-------------------------");
+            cantidadProductos ++;
         } else {
-            System.out.println("Producto ya se encuentra en la lista...");
+            System.out.println("\nProducto ya se encuentra en la lista...");
+            System.out.println("\n-------------------------");
         }
     }
 
     // Busca un Producto por nombre en 'Lista Productos'
     public Producto buscarProducto(String nombreXBuscar) {
 
-        Nodo actual = primero;
+        NodoLista actual = primero;
 
         while (actual != null) {
             if (actual.getProducto().getNombre().equalsIgnoreCase(nombreXBuscar)) {
                 return actual.getProducto();
             }
-            actual = actual.getSiguiente(); 
+            actual = actual.getSiguiente();
         }
         return null;
     }
@@ -79,8 +85,8 @@ public class ListaProductos {
     // Elimina un Producto por nombre de 'ListaProductos'
     public Producto eliminarProducto(String eliminarXNombre) {
 
-        Nodo actual = primero;
-        Nodo anteriorActual = null;
+        NodoLista actual = primero;
+        NodoLista anteriorActual = null;
 
         while (actual != null) {
             if (actual.getProducto().getNombre().equalsIgnoreCase(eliminarXNombre)) {
@@ -93,16 +99,16 @@ public class ListaProductos {
                 return actual.getProducto();
             }
             anteriorActual = actual;
-            actual = actual.getSiguiente();  
+            actual = actual.getSiguiente();
         }
-        
+
         return null;
     }
 
     // Modifica un Producto existente en 'ListaProductos'
     public Producto modificarProducto(String modificarXNombre, String nuevoNombre, double nuevoPrecio, String nuevaCategoria, String nuevaFechaVencimiento, int nuevaCantidad) {
 
-        Nodo actual = primero;
+        NodoLista actual = primero;
 
         while (actual != null) {
             if (actual.getProducto().getNombre().equalsIgnoreCase(modificarXNombre)) {
@@ -113,7 +119,7 @@ public class ListaProductos {
                 actual.getProducto().setFechaVencimiento(nuevaFechaVencimiento);
                 actual.getProducto().setCantidad(nuevaCantidad);
 
-                return actual.getProducto(); 
+                return actual.getProducto();
             }
             actual = actual.getSiguiente();
         }
@@ -132,26 +138,30 @@ public class ListaProductos {
     // Imprime todos los Prodcutos existentes en 'ListaProductos'
     public void imprimirListaProductos() {
         if (estaVacia()) {
-            System.out.println("La lista de productos está vacía\n");
+            System.out.println("La lista de productos está vacía...");
+            System.out.println();
             return;
         }
 
-        Nodo actual = primero;
+        NodoLista actual = primero;
 
         while (actual != null) {
             System.out.println(actual.getProducto());
-            actual = actual.getSiguiente();            
+            actual = actual.getSiguiente();
+            System.out.println();
         }
     }
 
     // Genera un reporte de costos por Producto y costos totales
     public void reportarCostos() {
         if (estaVacia()) {
-            System.out.println("La lista de productos está vacía...\n");
+            System.out.println("\n----------- REPORTE DE COSTOS -----------\n");
+            System.out.println("La lista de productos está vacía...");
+            System.out.println("\n-------------------------");
             return;
         }
 
-        Nodo actual = primero;
+        NodoLista actual = primero;
         double costosTotales = 0;
 
         System.out.println("\n------------------------    REPORTE DE COSTOS    ------------------------\n");
