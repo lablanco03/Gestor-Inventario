@@ -1,251 +1,278 @@
 import java.util.Scanner;
 
+// NOTA PARA INTEGRACIÓN:
+// Este archivo contiene la parte del Main correspondiente a Persona 1 (gestión del inventario). Persona 2 debe agregar sus métodos aquí e integrar sus opciones en el switch del menú principal.
 public class Main {
 
     static Scanner sc = new Scanner(System.in);
-    static ListaProductos lista = new ListaProductos();
 
+    // La Tienda es el objeto central que une inventario (ArbolProductos) y cola de clientes (ColaClientes). Persona 2 implementará la clase Tienda.
+    static Tienda tienda = new Tienda();
+
+    // RUTINA PRINCIPAL
     public static void main(String[] args) {
         menu();
     }
 
-    // MENU PRINCIPAL =====
+    // MENÚ PRINCIPAL
     public static void menu() {
         int opcion;
 
         do {
-            System.out.println("\n----------- SISTEMA DE INVENTARIO SUPERMERCADO -----------\n");
-            System.out.println("1. Agregar producto al inicio");
-            System.out.println("2. Agregar producto al final");
-            System.out.println("3. Buscar producto");
-            System.out.println("4. Modificar producto");
-            System.out.println("5. Eliminar producto");
-            System.out.println("6. Mostrar productos");
-            System.out.println("7. Reporte de costos");
-            System.out.println("8. Agregar imagen a producto");
-            System.out.println("9. Salir");
+            System.out.println("\n----------- SISTEMA DE GESTIÓN DE INVENTARIO -----------\n");
+            System.out.println("--- Inventario ---");
+            System.out.println("1. Agregar producto al inventario");
+            System.out.println("2. Buscar producto en inventario");
+            System.out.println("3. Eliminar producto del inventario");
+            System.out.println("4. Modificar producto del inventario");
+            System.out.println("5. Mostrar inventario");
+            System.out.println("--- Clientes ---");
+            System.out.println("6. Agregar cliente a la cola");     // Persona 2
+            System.out.println("7. Atender siguiente cliente");     // Persona 2
+            System.out.println("-------------------------");
+            System.out.println("8. Salir");
             System.out.println();
 
             opcion = leerEntero("Seleccione una opción: ");
 
-            switch(opcion) {
+            switch (opcion) {
                 case 1:
-                    agregarProducto(true);
+                    agregarProductoInventario();
                     break;
                 case 2:
-                    agregarProducto(false);
+                    buscarProductoInventario();
                     break;
                 case 3:
-                    buscarProducto();
+                    eliminarProductoInventario();
                     break;
                 case 4:
-                    modificarProducto();
+                    modificarProductoInventario();
                     break;
                 case 5:
-                    eliminarProducto();
+                    tienda.getInventario().mostrarInventario();
                     break;
                 case 6:
-                    System.out.println("\n----------- LISTA DE PRODUCTOS -----------\n");
-                    lista.imprimirListaProductos();
-                    System.out.println("-------------------------");
+                    agregarCliente(); // Persona 2 implementa este método
                     break;
                 case 7:
-                    lista.reportarCostos();
+                    atenderCliente(); // Persona 2 implementa este método
                     break;
                 case 8:
-                    agregarImagenAProducto();
-                    break;
-                case 9:
-                    System.out.println("\n-------------------------\n");
+                    System.out.println("\n-------------------------");
                     System.out.println("Saliendo del sistema...");
-                    System.out.println("\n-------------------------\n");
+                    System.out.println("-------------------------\n");
                     break;
                 default:
-                    System.out.println("\n-------------------------\n");
+                    System.out.println("\n-------------------------");
                     System.out.println("Opción inválida. Intente nuevamente.");
-                    System.out.println("\n-------------------------\n");
+                    System.out.println("-------------------------\n");
             }
-        } while(opcion != 9);
+
+        } while (opcion != 8);
     }
 
-    // AGREGAR PRODUCTO
-    public static void agregarProducto(boolean inicio) {
-        System.out.println("\n----------- AGREGAR PRODUCTO -----------\n");
+    // AGREGAR PRODUCTO AL INVENTARIO (Persona 1)
+    // Solicita los datos del producto y lo inserta en el ArbolProductos del inventario de la Tienda.
+    public static void agregarProductoInventario() {
+        System.out.println("\n----------- AGREGAR PRODUCTO AL INVENTARIO -----------\n");
 
-        String nombre = leerTexto("Nombre: ");
+        String nombre = leerTexto("Nombre del producto: ");
+
+        // Validar que no exista ya en el inventario antes de pedir más datos
+        if (tienda.getInventario().buscarProducto(nombre) != null) {
+            System.out.println("\nEse producto ya existe en el inventario.");
+            System.out.println("\n-------------------------");
+            return;
+        }
+
         double precio = leerDoublePositivo("Precio en colones: ");
         String categoria = leerTexto("Categoría: ");
 
         System.out.print("Fecha de vencimiento (DD/MM/AAAA) o 'Enter' si no aplica: ");
-        String fecha = sc.nextLine();
+        String fecha = sc.nextLine().trim();
         if (fecha.isEmpty()) { fecha = null; }
 
-        int cantidad = leerEnteroPositivo("Cantidad: ");
+        int cantidad = leerEnteroPositivo("Cantidad en inventario: ");
 
-        Producto nuevo = new Producto(nombre, precio, categoria, fecha, cantidad);
-
-        if(inicio) {
-            lista.agregarProductoInicio(nuevo);
-        } else {
-            lista.agregarProductoFinal(nuevo);
-        }
+        Producto productoNuevo = new Producto(nombre, precio, categoria, fecha, cantidad);
+        tienda.getInventario().ins ertarProducto(productoNuevo);
     }
 
-    // BUSCAR PRODUCTO
-    public static void buscarProducto() {
-        System.out.println("\n----------- BUSCAR PRODUCTO -----------\n");
+    // BUSCAR PRODUCTO EN INVENTARIO (Persona 1)
+    // Solicita un nombre y muestra el producto si existe.
+    public static void buscarProductoInventario() {
+        System.out.println("\n----------- BUSCAR PRODUCTO EN INVENTARIO -----------\n");
 
-        String nombre = leerTexto("Ingrese nombre del producto: ");
+        String nombre = leerTexto("Nombre del producto a buscar: ");
+        Producto producto = tienda.getInventario().buscarProducto(nombre);
 
-        Producto p = lista.buscarProducto(nombre);
-
-        if(p != null) {
+        if (producto != null) {
             System.out.println("\nProducto encontrado:\n");
-            System.out.println(p);
-            System.out.println("\n-------------------------");
-        } else {
-            System.out.println("\nProducto no encontrado.");
+            System.out.println(producto);
             System.out.println("\n-------------------------");
         }
     }
 
-    // ELIMINAR PRODUCTO
-    public static void eliminarProducto() {
-        System.out.println("\n----------- ELIMINAR PRODUCTO -----------\n");
+    // ELIMINAR PRODUCTO DEL INVENTARIO (Persona 1)
+    // Solicita un nombre y elimina el producto si existe.
+    public static void eliminarProductoInventario() {
+        System.out.println("\n----------- ELIMINAR PRODUCTO DEL INVENTARIO -----------\n");
 
-        String nombre = leerTexto("Ingrese nombre del producto a eliminar: ");
+        String nombre = leerTexto("Nombre del producto a eliminar: ");
+        Producto eliminado = tienda.getInventario().eliminarProducto(nombre);
 
-        Producto eliminado = lista.eliminarProducto(nombre);
-
-        if(eliminado != null) {
-            System.out.println("\nProducto eliminado correctamente.");
-            System.out.println("\n-------------------------");
-        } else {
-            System.out.println("\nProducto no existe.");
+        if (eliminado != null) {
+            System.out.println("\nProducto eliminado correctamente:");
+            System.out.println(eliminado);
             System.out.println("\n-------------------------");
         }
     }
 
-    // MODIFICAR PRODUCTO
-    public static void modificarProducto() {
-        System.out.println("\n----------- MODIFICAR PRODUCTO -----------\n");
+    // MODIFICAR PRODUCTO DEL INVENTARIO (Persona 1)
+    // Muestra el producto actual y permite elegir qué atributo modificar.Si el nombre cambia, el árbol elimina y reinserta el nodo automáticamente para preservar el orden.
+    public static void modificarProductoInventario() {
+        System.out.println("\n----------- MODIFICAR PRODUCTO DEL INVENTARIO -----------\n");
 
-        String nombre = leerTexto("Ingrese nombre del producto a modificar: ");
-
-        if(lista.buscarProducto(nombre) == null) {
-            System.out.println("\nEl producto no existe.");
-            System.out.println("\n-------------------------");
-            return;
-        }
-
-        String nuevoNombre = leerTexto("Nuevo nombre: ");
-        double precio = leerDoublePositivo("Nuevo precio: ");
-        String categoria = leerTexto("Nueva categoría: ");
-
-        System.out.print("Nueva fecha de vencimiento (DD/MM/AAAA) o 'Enter' si no aplica: ");
-        String fecha = sc.nextLine();
-        if (fecha.isEmpty()) { fecha = null; }
-
-        int cantidad = leerEnteroPositivo("Nueva cantidad: ");
-
-        lista.modificarProducto(
-                nombre,
-                nuevoNombre,
-                precio,
-                categoria,
-                fecha,
-                cantidad
-        );
-
-        System.out.println("\nProducto modificado correctamente.");
-        System.out.println("\n-------------------------");
-    }
-
-    // AGREGAR IMAGEN A PRODUCTO
-    public static void agregarImagenAProducto() {
-        System.out.println("\n----------- AGREGAR IMAGEN A PRODUCTO -----------\n");
-
-        String nombre = leerTexto("Ingrese el nombre del producto: ");
-        Producto producto = lista.buscarProducto(nombre);
+        String nombreActual = leerTexto("Nombre del producto a modificar: ");
+        Producto producto = tienda.getInventario().buscarProducto(nombreActual);
 
         if (producto == null) {
-            System.out.println("\nProducto no encontrado.");
             System.out.println("\n-------------------------");
             return;
         }
 
-        System.out.print("Ingrese la ruta de la imagen (ej: imagenes/foto.jpg): ");
-        String ruta = sc.nextLine().trim();
+        System.out.println("\nProducto actual:\n");
+        System.out.println(producto);
+        System.out.println();
 
-        if (ruta.isEmpty()) {
-            System.out.println("\nRuta no válida. No se agregó la imagen.");
-            System.out.println("\n-------------------------");
-            return;
+        // El usuario elige qué campo modificar
+        System.out.println("¿Qué desea modificar?");
+        System.out.println("1. Nombre");
+        System.out.println("2. Precio");
+        System.out.println("3. Categoría");
+        System.out.println("4. Fecha de vencimiento");
+        System.out.println("5. Cantidad");
+        System.out.println("6. Todos los campos");
+        System.out.println();
+
+        int campo = leerEntero("Seleccione una opción: ");
+
+        // Cargar valores actuales como base — solo se reemplaza lo que el usuario elija
+        String nuevoNombre    = producto.getNombre();
+        double nuevoPrecio    = producto.getPrecio();
+        String nuevaCategoria = producto.getCategoria();
+        String nuevaFecha     = producto.getFechaVencimiento();
+        int nuevaCantidad     = producto.getCantidad();
+
+        switch (campo) {
+            case 1:
+                nuevoNombre = leerTexto("Nuevo nombre: ");
+                break;
+            case 2:
+                nuevoPrecio = leerDoublePositivo("Nuevo precio en colones: ");
+                break;
+            case 3:
+                nuevaCategoria = leerTexto("Nueva categoría: ");
+                break;
+            case 4:
+                System.out.print("Nueva fecha de vencimiento (DD/MM/AAAA) o 'Enter' si no aplica: ");
+                String fechaInput = sc.nextLine().trim();
+                nuevaFecha = fechaInput.isEmpty() ? null : fechaInput;
+                break;
+            case 5:
+                nuevaCantidad = leerEnteroPositivo("Nueva cantidad: ");
+                break;
+            case 6:
+                nuevoNombre    = leerTexto("Nuevo nombre: ");
+                nuevoPrecio    = leerDoublePositivo("Nuevo precio en colones: ");
+                nuevaCategoria = leerTexto("Nueva categoría: ");
+                System.out.print("Nueva fecha de vencimiento (DD/MM/AAAA) o 'Enter' si no aplica: ");
+                String fechaInputTodos = sc.nextLine().trim();
+                nuevaFecha    = fechaInputTodos.isEmpty() ? null : fechaInputTodos;
+                nuevaCantidad = leerEnteroPositivo("Nueva cantidad: ");
+                break;
+            default:
+                System.out.println("\nOpción inválida. No se realizaron cambios.");
+                System.out.println("\n-------------------------");
+                return;
         }
 
-        lista.agregarImagenProducto(producto, ruta);
-        System.out.println("\nImagen agregada correctamente (si la ruta era válida).");
-        System.out.println("\n-------------------------");
+        Producto modificado = tienda.getInventario().modificarProducto(
+                nombreActual, nuevoNombre, nuevoPrecio, nuevaCategoria, nuevaFecha, nuevaCantidad);
+
+        if (modificado != null) {
+            System.out.println("\n¡Producto modificado correctamente!\n");
+            System.out.println(modificado);
+            System.out.println("\n-------------------------");
+        }
+    }
+
+    // AGREGAR CLIENTE (Persona 2 implementa el cuerpo)
+    // Declarado aquí para que el switch compile sin errores.
+    public static void agregarCliente() {
+        // Persona 2 implementa todo este método acá
+        System.out.println("\n[Función pendiente - Persona 2]");
+    }
+
+    // ATENDER CLIENTE (Persona 2 implementa el cuerpo)
+    public static void atenderCliente() {
+        // Persona 2 implementa todo este método acá
+        System.out.println("\n[Función pendiente - Persona 2]");
     }
 
     // VALIDACIONES DE ENTRADA
+    // Estos métodos se encargan de comprobar que lo que ingrese el usuario sea un dato del tipo correcto para cada entrada
+
+    // Que lo ingresado por usuario sea un String cuando corresponda
     public static String leerTexto(String mensaje) {
         String texto;
         do {
             System.out.print(mensaje);
             texto = sc.nextLine().trim();
-            if(texto.isEmpty()) {
-                System.out.println();
-                System.out.println("Entrada incorrecta. Intente nuevamente.");
-                System.out.println();
+            if (texto.isEmpty()) {
+                System.out.println("\nEntrada incorrecta. Intente nuevamente.\n");
             }
-        } while(texto.isEmpty());
+        } while (texto.isEmpty());
         return texto;
     }
 
+    // Que lo ingresado por usuario sea un número Entero cuando corresponda
     public static int leerEntero(String mensaje) {
-        while(true) {
+        while (true) {
             try {
                 System.out.print(mensaje);
-                int numero = Integer.parseInt(sc.nextLine());
-                return numero;
-            } catch(Exception e) {
-                System.out.println();
-                System.out.println("Entrada incorrecta. Debe ingresar un número.");
-                System.out.println();
+                return Integer.parseInt(sc.nextLine().trim());
+            } catch (Exception e) {
+                System.out.println("\nEntrada incorrecta. Debe ingresar un número entero.\n");
             }
         }
     }
 
+    // Que lo ingresado por usuario sea un número Entero Positivo cuando corresponda
     public static int leerEnteroPositivo(String mensaje) {
         int numero;
         do {
             numero = leerEntero(mensaje);
-            if(numero < 0) {
-                System.out.println();
-                System.out.println("No se permiten valores negativos.");
-                System.out.println();
+            if (numero < 0) {
+                System.out.println("\nNo se permiten valores negativos.\n");
             }
-        } while(numero < 0);
+        } while (numero < 0);
         return numero;
     }
 
+    // Que lo ingresado por usuario sea un número Double Positivo cuando corresponda
     public static double leerDoublePositivo(String mensaje) {
-        while(true) {
+        while (true) {
             try {
                 System.out.print(mensaje);
-                double numero = Double.parseDouble(sc.nextLine());
-                if(numero < 0) {
-                    System.out.println();
-                    System.out.println("No se permiten valores negativos.");
-                    System.out.println();
+                double numero = Double.parseDouble(sc.nextLine().trim());
+                if (numero < 0) {
+                    System.out.println("\nNo se permiten valores negativos.\n");
                     continue;
                 }
                 return numero;
-            } catch(Exception e) {
-                System.out.println();
-                System.out.println("Entrada incorrecta. Debe ingresar un número.");
-                System.out.println();
+            } catch (Exception e) {
+                System.out.println("\nEntrada incorrecta. Debe ingresar un número.\n");
             }
         }
     }
