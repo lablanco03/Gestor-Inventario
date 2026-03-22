@@ -1,12 +1,12 @@
 import java.util.Scanner;
 
 // NOTA PARA INTEGRACIÓN:
-// Este archivo contiene la parte del Main correspondiente a Persona 1 (gestión del inventario). Persona 2 debe agregar sus métodos aquí e integrar sus opciones en el switch del menú principal.
+// Este archivo contiene la parte del Main correspondiente a la gestión del inventario y sus métodos como opciones en el switch del menú principal.
 public class Main {
 
     static Scanner sc = new Scanner(System.in);
 
-    // La Tienda es el objeto central que une inventario (ArbolProductos) y cola de clientes (ColaClientes). Persona 2 implementará la clase Tienda.
+    // La Tienda es el objeto central que une inventario (ArbolProductos) y cola de clientes (ColaClientes). 
     static Tienda tienda = new Tienda();
 
     // RUTINA PRINCIPAL
@@ -25,12 +25,13 @@ public class Main {
             System.out.println("2. Buscar producto en inventario");
             System.out.println("3. Eliminar producto del inventario");
             System.out.println("4. Modificar producto del inventario");
-            System.out.println("5. Mostrar inventario");
+            System.out.println("5. Agregar imagen a producto del inventario");
+            System.out.println("6. Mostrar inventario");
             System.out.println("--- Clientes ---");
-            System.out.println("6. Agregar cliente a la cola");     // Persona 2
-            System.out.println("7. Atender siguiente cliente");     // Persona 2
+            System.out.println("7. Agregar cliente a la cola");
+            System.out.println("8. Atender siguiente cliente");
             System.out.println("-------------------------");
-            System.out.println("8. Salir");
+            System.out.println("9. Salir");
             System.out.println();
 
             opcion = leerEntero("Seleccione una opción: ");
@@ -49,15 +50,18 @@ public class Main {
                     modificarProductoInventario();
                     break;
                 case 5:
-                    tienda.getInventario().mostrarInventario();
+                    agregarImagenProducto();
                     break;
                 case 6:
-                    agregarCliente(); // Persona 2 implementa este método
+                    tienda.getInventario().mostrarInventario();
                     break;
                 case 7:
-                    atenderCliente(); // Persona 2 implementa este método
+                    agregarCliente();
                     break;
                 case 8:
+                    atenderCliente();
+                    break;
+                case 9:
                     System.out.println("\n-------------------------");
                     System.out.println("Saliendo del sistema...");
                     System.out.println("-------------------------\n");
@@ -68,10 +72,10 @@ public class Main {
                     System.out.println("-------------------------\n");
             }
 
-        } while (opcion != 8);
+        } while (opcion != 9);
     }
 
-    // AGREGAR PRODUCTO AL INVENTARIO (Persona 1)
+    // AGREGAR PRODUCTO AL INVENTARIO
     // Solicita los datos del producto y lo inserta en el ArbolProductos del inventario de la Tienda.
     public static void agregarProductoInventario() {
         System.out.println("\n----------- AGREGAR PRODUCTO AL INVENTARIO -----------\n");
@@ -95,10 +99,10 @@ public class Main {
         int cantidad = leerEnteroPositivo("Cantidad en inventario: ");
 
         Producto productoNuevo = new Producto(nombre, precio, categoria, fecha, cantidad);
-        tienda.getInventario().ins ertarProducto(productoNuevo);
+        tienda.getInventario().insertarProducto(productoNuevo);
     }
 
-    // BUSCAR PRODUCTO EN INVENTARIO (Persona 1)
+    // BUSCAR PRODUCTO EN INVENTARIO
     // Solicita un nombre y muestra el producto si existe.
     public static void buscarProductoInventario() {
         System.out.println("\n----------- BUSCAR PRODUCTO EN INVENTARIO -----------\n");
@@ -113,7 +117,7 @@ public class Main {
         }
     }
 
-    // ELIMINAR PRODUCTO DEL INVENTARIO (Persona 1)
+    // ELIMINAR PRODUCTO DEL INVENTARIO
     // Solicita un nombre y elimina el producto si existe.
     public static void eliminarProductoInventario() {
         System.out.println("\n----------- ELIMINAR PRODUCTO DEL INVENTARIO -----------\n");
@@ -128,8 +132,8 @@ public class Main {
         }
     }
 
-    // MODIFICAR PRODUCTO DEL INVENTARIO (Persona 1)
-    // Muestra el producto actual y permite elegir qué atributo modificar.Si el nombre cambia, el árbol elimina y reinserta el nodo automáticamente para preservar el orden.
+    // MODIFICAR PRODUCTO DEL INVENTARIO
+    // Muestra el producto actual y permite elegir qué atributo modificar. Si el nombre cambia, el árbol elimina y reinserta el nodo automáticamente para preservar el orden.
     public static void modificarProductoInventario() {
         System.out.println("\n----------- MODIFICAR PRODUCTO DEL INVENTARIO -----------\n");
 
@@ -207,17 +211,112 @@ public class Main {
         }
     }
 
-    // AGREGAR CLIENTE (Persona 2 implementa el cuerpo)
-    // Declarado aquí para que el switch compile sin errores.
-    public static void agregarCliente() {
-        // Persona 2 implementa todo este método acá
-        System.out.println("\n[Función pendiente - Persona 2]");
+    // AGREGAR IMAGEN A PRODUCTO
+    // Solicita el nombre del producto y la ruta de la imagen, y la agrega si el producto existe.
+    public static void agregarImagenProducto() {
+        System.out.println("\n----------- AGREGAR IMAGEN A PRODUCTO -----------\n");
+
+        String nombre = leerTexto("Nombre del producto: ");
+        Producto producto = tienda.getInventario().buscarProducto(nombre);
+
+        if (producto == null) {
+            System.out.println("\n-------------------------");
+            return;
+        }
+
+        System.out.print("Ruta de la imagen (ej: imagenes/foto.jpg) o 'Enter' para cancelar: ");
+        String ruta = sc.nextLine().trim();
+
+        if (ruta.isEmpty()) {
+            System.out.println("\nOperación cancelada.");
+            System.out.println("\n-------------------------");
+            return;
+        }
+
+        producto.agregarImagen(ruta);
+        System.out.println("\n¡Imagen agregada correctamente!");
+        System.out.println("\n-------------------------");
     }
 
-    // ATENDER CLIENTE (Persona 2 implementa el cuerpo)
+    // AGREGAR CLIENTE
+    // Crea un cliente, llena su carrito con productos del inventario y lo encola en la ColaClientes.
+    public static void agregarCliente() {
+        System.out.println("\n----------- AGREGAR CLIENTE -----------\n");
+
+        String nombre = leerTexto("Nombre del cliente: ");
+
+        int prioridad;
+        do {
+            prioridad = leerEntero("Prioridad (1 = básico, 2 = afiliado, 3 = premium): ");
+            if (prioridad < 1 || prioridad > 3) {
+                System.out.println("\nPrioridad inválida. Ingrese 1, 2 o 3.\n");
+            }
+        } while (prioridad < 1 || prioridad > 3);
+
+        Cliente cliente = new Cliente(nombre, prioridad);
+
+        // Llenar el carrito con productos del inventario
+        System.out.println("\nAhora puede agregar productos al carrito. Ingrese 'fin' para terminar.\n");
+
+        while (true) {
+            System.out.print("Nombre del producto a agregar (o 'fin' para terminar): ");
+            String nombreProducto = sc.nextLine().trim();
+
+            if (nombreProducto.equalsIgnoreCase("fin")) { break; }
+
+            Producto producto = tienda.getInventario().buscarProducto(nombreProducto);
+
+            if (producto == null) {
+                System.out.println("\nProducto no encontrado en el inventario. Intente nuevamente.\n");
+                continue;
+            }
+
+            int cantidadDeseada = leerEnteroPositivo("Cantidad a agregar: ");
+
+            if (producto.getCantidad() == 0) {
+                System.out.println("\nNo hay unidades disponibles de ese producto en el inventario.\n");
+                continue;
+            }
+
+            if (cantidadDeseada > producto.getCantidad()) {
+                System.out.println("\nStock insuficiente. Disponible: " + producto.getCantidad() + "\n");
+                continue;
+            }
+
+            Producto itemCarrito = new Producto(producto.getNombre(), producto.getPrecio(),
+                                                producto.getCategoria(), producto.getFechaVencimiento(),
+                                                cantidadDeseada);
+            cliente.getCarrito().agregarProductoFinal(itemCarrito);
+            producto.setCantidad(producto.getCantidad() - cantidadDeseada);
+            System.out.println("\nProducto agregado al carrito. Stock restante: " + producto.getCantidad());
+            System.out.println("\n-------------------------");
+        }
+
+        tienda.getCola().encolar(cliente);
+        System.out.println("\n¡Cliente " + cliente.getNombre() + " agregado a la cola correctamente!");
+        System.out.println("\n-------------------------");
+    }
+
+    // ATENDER CLIENTE
+    // Saca al cliente con mayor prioridad de la cola e imprime su factura.
     public static void atenderCliente() {
-        // Persona 2 implementa todo este método acá
-        System.out.println("\n[Función pendiente - Persona 2]");
+        System.out.println("\n----------- ATENDER CLIENTE -----------\n");
+
+        Cliente cliente = tienda.getCola().desencolar();
+
+        if (cliente == null) {
+            System.out.println("No hay clientes en la cola.");
+            System.out.println("\n-------------------------");
+            return;
+        }
+
+        System.out.println("Atendiendo a: " + cliente.getNombre());
+        System.out.println("Prioridad: " + cliente.getPrioridad());
+        System.out.println();
+
+        // Imprimir factura usando el reporte de costos del carrito
+        cliente.getCarrito().reportarCostos();
+        System.out.println("\n-------------------------");
     }
 
     // VALIDACIONES DE ENTRADA

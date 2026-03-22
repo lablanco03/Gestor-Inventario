@@ -44,7 +44,7 @@ public class ArbolProductos {
         }
 
         // Se sale del bucle al no encontrarlo
-        System.out.println("\nProducto \"" + nombre + "\" no encontrado en el inventario.");
+        System.out.println("\nProducto \"" + nombre + "\" no fue encontrado en el inventario.");
         return null;
     }
 
